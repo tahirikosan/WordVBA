@@ -1,0 +1,54 @@
+Sub mymakro()
+'
+' mymakro Macro
+'
+'
+
+Dim cyrill As Variant
+Dim latin17 As Variant
+             
+cyrill = Array(ChrW(&H410), ChrW(&H411), ChrW(&H412), ChrW(&H413), ChrW(&H414), ChrW(&H415), ChrW(&H416), ChrW(&H417), ChrW(&H418), ChrW(&H419), ChrW(&H41A), ChrW(&H41B), ChrW(&H41C), ChrW(&H41D), ChrW(&H41E), ChrW(&H41F), ChrW(&H420), ChrW(&H421), ChrW(&H422), ChrW(&H423), ChrW(&H424), ChrW(&H425), ChrW(&H426), ChrW(&H427), ChrW(&H428), ChrW(&H429), ChrW(&H42A), ChrW(&H42B), ChrW(&H42C), ChrW(&H42D), ChrW(&H42E), ChrW(&H42F), ChrW(&H430), ChrW(&H431), ChrW(&H432), ChrW(&H433), ChrW(&H434), ChrW(&H435), ChrW(&H436), ChrW(&H437), ChrW(&H438), ChrW(&H439), ChrW(&H43A), ChrW(&H43B), ChrW(&H43C), ChrW(&H43D), ChrW(&H43E), ChrW(&H43F), ChrW(&H440), ChrW(&H441), ChrW(&H442), ChrW(&H443), ChrW(&H444), ChrW(&H445), ChrW(&H446), ChrW(&H447), ChrW(&H448), ChrW(&H449), ChrW(&H44A), ChrW(&H44B), ChrW(&H44C), ChrW(&H44D), ChrW(&H44E), ChrW(&H44F), ChrW(&H4D8), ChrW(&H4D9), ChrW(&H492), ChrW(&H493), ChrW(&H401), ChrW(&H451), ChrW(&H49A), ChrW(&H49B), ChrW(&H4A2), ChrW(&H4A3), ChrW(&H4E8), ChrW(&H4E9))
+latin17 = Array("A", "B", "V", "G", "D", "E", "J", "Z", "I'", "I'", "K", "L", "M", "N", "O", "P", "R", "S", "T", "Y'", "F", "H", "TS", "C'", "S'", "S'S'", "", "Y", "", "E", "YU", "YA", "a", "b", "v", "g", "d", "e", "j", "z", "i'", "i'", "k", "l", "m", "n", "o", "p", "r", "s", "t", "y'", "f", "h", "ts", "c'", "s'", "s's'", "", "y", "", "e", "yu", "ya", "A'", "a'", "G'", "g'", "YO", "yo", "Q", "q", "N'", "n'", "O'", "o'")
+
+'Mevcut dökumandaki bütün harfleri sırayla oCharacter'e eşitler
+    For Each oCharacter In ActiveDocument.Characters
+    
+          For J = 1 To (GetLength(cyrill))
+          
+            If StrComp(oCharacter, cyrill(J - 1)) = 0 Then
+          
+            'oCharacter'i latin17(J - 1) ile değiştirir
+                With Selection.Find
+                 .ClearFormatting
+                 .Text = oCharacter
+                 .Replacement.ClearFormatting
+                 .Replacement.Text = latin17(J - 1)
+                 .Execute Replace:=wdReplaceAll, Forward:=True, _
+                 Wrap:=wdFindContinue
+                End With
+            End If
+        Next J
+    Next
+    
+    'Dökümanı kaydeder
+    ActiveDocument.SaveAs _
+    FileName:="C:\Users\Tahir\Documents\converted.doc", _
+    FileFormat:=wdFormatText, _
+    Encoding:=65001
+    
+    'Dökümanı kapatır
+    ActiveDocument.Close
+
+    End Sub
+    
+    'Bir değerin uzunluğunu döndürür
+    Public Function GetLength(a As Variant) As Integer
+        If IsEmpty(a) Then
+           GetLength = 0
+        Else
+           GetLength = UBound(a) - LBound(a) + 1
+        End If
+    End Function
+
+
+
